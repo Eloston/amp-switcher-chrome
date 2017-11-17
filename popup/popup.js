@@ -1,3 +1,15 @@
+"use strict";
+
+(function() {
+    let manifest = chrome.runtime.getManifest();
+    document.getElementById("extensionName").appendChild(
+        document.createTextNode(manifest.name)
+    );
+    document.getElementById("extensionVersion").appendChild(
+        document.createTextNode(manifest.version)
+    );
+})();
+
 chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
   var tab = tabs[0];
   var url = tab.url;
@@ -9,7 +21,7 @@ chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
 
   function sendReloadInstruction() {
     chrome.tabs.sendMessage(tab.id, {
-      message: 'navigateAfterSettingsUpdate',
+      message: 'navigate',
       url: originalPageUrl
     });
   }
