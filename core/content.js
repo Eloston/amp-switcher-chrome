@@ -1,3 +1,5 @@
+"use strict";
+
 var ampLink = document.querySelector('link[rel="amphtml"]');
 
 var docEl = document.documentElement;
@@ -8,15 +10,15 @@ if (isAMP) {
     var canonicalURL = getCanonicalURL();
 
     if (canonicalURL) {
-        chrome.runtime.sendMessage({amp: true, url: canonicalURL, origUrl: location.href});
+        chrome.runtime.sendMessage({amp: false, canonical: true, url: canonicalURL, origUrl: location.href});
     } else {
-        chrome.runtime.sendMessage({amp: false });
+        chrome.runtime.sendMessage({amp: false, canonical: false});
     }
 } else {
     if (ampLink && ampLink.href) {
-        chrome.runtime.sendMessage({amp: true, url: ampLink.href, origUrl: location.href});
+        chrome.runtime.sendMessage({amp: true, canonical: false, url: ampLink.href, origUrl: location.href});
     } else {
-        chrome.runtime.sendMessage({amp: false });
+        chrome.runtime.sendMessage({amp: false, canonical: false});
     }
 }
 
@@ -44,12 +46,20 @@ function applyMobileCSS(node) {
 }
 
 function getCanonicalURL() {
-    var cononicalElement = document.querySelector("link[rel='canonical']")
+    var canonicalElement = document.querySelector("link[rel='canonical']")
 
-    if( cononicalElement != null ) {
-        if (cononicalElement.hasAttribute("href"))
-            return cononicalElement.getAttribute("href");
-
+    if (canonicalElement != null) {
+        if (canonicalElement.hasAttribute("href")) {
+            return canonicalElement.getAttribute("href");
+        }
     }
     return false;
 }
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if (request.message === 'navigate') {
+            location.href = request.url;
+        }
+    }
+);

@@ -1,3 +1,5 @@
+"use strict";
+
 var defaultDefault = 'on';
 
 function managerForKey(key) {
@@ -13,6 +15,7 @@ function managerForKey(key) {
       return new Promise(function (res, rej) {
         if (value === 'default') {
           chrome.storage.sync.remove(key);
+      res();
         } else {
           var setter = {};
           setter[key] = value;
@@ -41,9 +44,7 @@ var stateManager = {
       getAmpSetting: function () {
         return new Promise(function (res) {
           var query = ['default', keys.page, keys.domain];
-          console.log('query', query);
           chrome.storage.sync.get(query, function (result) {
-            console.log(result);
             res(result[keys.page] || result[keys.domain] || result.default || defaultDefault);
           });
         });

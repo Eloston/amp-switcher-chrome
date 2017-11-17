@@ -1,5 +1,7 @@
+"use strict";
+
 var helpers = {
   getOriginalUrlFromUrl: function (url) {
-    return chrome.extension.getBackgroundPage().originalUrls.get(url);
+    return chrome.extension.getBackgroundPage().originalUrls.get(url) || url;
   }
 };
