@@ -1,0 +1,39 @@
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700'
+      rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="popup.css"/>
+<form id="main-form">
+  <h2 style="text-align: center;">AMP Settings</h2>
+
+
+  <input type="hidden" value="default" name="page">
+
+  <fieldset class="domain">
+    <h2>Current website (<span id="current-domain"></span>):</h2>
+    <label>
+      <input type="radio" value="on" name="domain"> AMP version if available
+    </label>
+    <label>
+      <input type="radio" value="off" name="domain"> Normal version
+    </label>
+    <label>
+      <input type="radio" value="default" name="domain"> Use default
+    </label>
+  </fieldset>
+  <fieldset class="default">
+    <h2>Default (when no other preference):</h2>
+    <label>
+      <input type="radio" value="on" name="default"> AMP version if available
+    </label>
+    <label>
+      <input type="radio" value="off" name="default"> Normal version
+    </label>
+  </fieldset>
+
+</form>
+<footer>
+  <a href="http://bigpress.net/es/amp-chrome" target="_blank">Powered by Bigpress</a>
+</footer>
+<script src="../core/config.js"></script>
+<script src="../core/helpers.js"></script>
+<script src="../core/stateManager.js"></script>
+<script src="popup.js"></script>

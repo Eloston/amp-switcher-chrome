@@ -1,0 +1,46 @@
+body {
+    background: #E4E4E4;
+    min-width: 300px;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+fieldset {
+    background: white;
+    margin: 15px;
+    padding-bottom: 20px;
+    border: 1px solid #ccc;
+}
+
+label {
+    display: block;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    font-size: 14px;
+}
+
+footer {
+    text-align: center;
+    font-size: 16px;
+    padding: 10px;
+}
+
+footer .logo {
+    max-width: 125px;
+    display: block;
+    margin: 10px auto;
+}
+
+footer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+footer .logo img {
+    max-width: 100%;
+}
