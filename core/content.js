@@ -3,32 +3,24 @@ var ampLink = document.querySelector('link[rel="amphtml"]');
 var docEl = document.documentElement;
 var isAMP = docEl.hasAttribute('amp') || docEl.hasAttribute('⚡️');
 
-
-
 if (isAMP) {
     applyMobileCSS(window.document.body);
     var canonicalURL = getCanonicalURL();
 
     if (canonicalURL) {
-
-        chrome.runtime.sendMessage({amp: true, url: canonicalURL});
+        chrome.runtime.sendMessage({amp: true, url: canonicalURL, origUrl: location.href});
     } else {
         chrome.runtime.sendMessage({amp: false });
-
     }
 } else {
-
-
-
     if (ampLink && ampLink.href) {
-        chrome.runtime.sendMessage({amp: true, url: ampLink.href});
+        chrome.runtime.sendMessage({amp: true, url: ampLink.href, origUrl: location.href});
     } else {
         chrome.runtime.sendMessage({amp: false });
     }
-
 }
 
-
+// Functions
 
 function inspectDocNodes(node){
     if (node.tagName != "HEAD") return;
@@ -42,8 +34,6 @@ function inspectDocNodes(node){
         // console.log('disconnected from doc')
     }
 }
-
-
 
 function applyMobileCSS(node) {
     var css = "body > * { max-width: 600px !important; margin: 0px auto !important; }";
