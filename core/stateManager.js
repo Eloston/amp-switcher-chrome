@@ -1,6 +1,7 @@
 "use strict";
 
 var defaultDefault = 'on';
+var anchorTag = document.createElement('a');
 
 function managerForKey(key) {
   return {
@@ -30,10 +31,11 @@ function managerForKey(key) {
 
 var stateManager = {
   convertUrlToDomain: function (url) {
-    return url.match(/\w+\:\/\/([\w\.\-]+)\/.*/)[1];
+    anchorTag.href = url; 
+    return anchorTag.hostname;
   },
   forUrl: function (url) {
-    realArticleUrl = helpers.getOriginalUrlFromUrl(url);
+    let realArticleUrl = helpers.getOriginalUrlFromUrl(url);
     var keys = {
       page: 'page-' + realArticleUrl,
       domain: 'domain-' + this.convertUrlToDomain(realArticleUrl)
