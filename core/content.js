@@ -1,60 +1,77 @@
 "use strict";
 
-var ampLink = document.querySelector('link[rel="amphtml"]');
+var ampSelector = 'link[rel="amphtml"]';
+var canonicalSelector = 'link[rel="canonical"]';
+var lastResult = null;
 
-var docEl = document.documentElement;
-var isAMP = docEl.hasAttribute('amp') || docEl.hasAttribute('⚡️');
+var headObserver = null;
+var linkObserver = null;
 
-if (isAMP) {
-    applyMobileCSS(window.document.body);
-    var canonicalURL = getCanonicalURL();
+function initAmpObserver() {
+    linkObserver = new MutationObserver(checkAmp);
+    linkObserver.observe(document.head, {
+        childList: true,
+        subtree: true
+    });
+}
 
-    if (canonicalURL) {
-        chrome.runtime.sendMessage({amp: false, canonical: true, url: canonicalURL, origUrl: location.href});
+function checkHead() {
+    if (document.head) {
+        headObserver.disconnect();
+        headObserver = false;
+        initAmpObserver();
+    }
+}
+
+function waitForHead() {
+    if (document.head) {
+        initAmpObserver();
     } else {
-        chrome.runtime.sendMessage({amp: false, canonical: false});
+        headObserver = new MutationObserver(checkHead);
+        headObserver.observe(document.documentElement, {childList: true});
     }
-} else {
-    if (ampLink && ampLink.href) {
-        chrome.runtime.sendMessage({amp: true, canonical: false, url: ampLink.href, origUrl: location.href});
+}
+
+function checkAmp() {
+    let docEl = document.documentElement;
+    let isAMP = docEl.hasAttribute('amp') || docEl.hasAttribute('⚡️');
+
+    if (!document.head) {
+        return;
+    }
+
+    if (isAMP) {
+        let canonicalLink = document.head.querySelector(canonicalSelector);
+        if (canonicalLink && canonicalLink.href && lastResult !== 'amp') {
+            lastResult = true;
+            chrome.runtime.sendMessage({amp: false, canonical: true, url: canonicalLink.href, origUrl: location.href});
+        } else if (lastResult !== false) {
+            lastResult = false;
+            chrome.runtime.sendMessage({amp: false, canonical: false});
+        }
     } else {
-        chrome.runtime.sendMessage({amp: false, canonical: false});
-    }
-}
-
-// Functions
-
-function inspectDocNodes(node){
-    if (node.tagName != "HEAD") return;
-
-    if (isAMP)
-        applyMobileCSS(node);
-    else {
-        queryForMeta(node);
-        headObserver = observeNode(node, inspectHeadNodes);
-        documentObserver.disconnect();
-        // console.log('disconnected from doc')
-    }
-}
-
-function applyMobileCSS(node) {
-    var css = "body > * { max-width: 600px !important; margin: 0px auto !important; }";
-    var style = document.createElement('style');
-    style.type = 'text/css';
-    style.appendChild(document.createTextNode(css));
-    node.appendChild(style);
-}
-
-function getCanonicalURL() {
-    var canonicalElement = document.querySelector("link[rel='canonical']")
-
-    if (canonicalElement != null) {
-        if (canonicalElement.hasAttribute("href")) {
-            return canonicalElement.getAttribute("href");
+        let ampLink = document.head.querySelector(ampSelector);
+        if (ampLink && ampLink.href && lastResult !== 'canonical') {
+            lastResult = 'canonical';
+            chrome.runtime.sendMessage({amp: true, canonical: false, url: ampLink.href, origUrl: location.href});
+        } else if (lastResult !== false) {
+            lastResult = false;
+            chrome.runtime.sendMessage({amp: false, canonical: false});
         }
     }
-    return false;
+
+    if (linkObserver && lastResult) {
+        linkObserver.disconnect();
+        linkObserver = false;
+    }
 }
+
+function initObserver() {
+    let observer = new MutationObserver(check);
+
+}
+
+waitForHead();
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
