@@ -12,7 +12,6 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
         originalUrls.delete(canonicalUrls.get(tabid));
         ampUrls.set(tabid, request.url);
 	originalUrls.set(request.url, request.origUrl);
-        chrome.pageAction.show(tabid);
         stateManager.forUrl(request.url).getAmpSetting().then(function(result) {
             if (result === 'on') {
                 chrome.tabs.update(tabid, {url: request.url});
@@ -23,7 +22,6 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
         originalUrls.delete(canonicalUrls.get(tabid));
         canonicalUrls.set(tabid, request.url);
 	originalUrls.set(request.url, request.origUrl);
-        chrome.pageAction.show(tabid);
         stateManager.forUrl(request.url).getAmpSetting().then(function(result) {
             if (result === 'off') {
                 chrome.tabs.update(tabid, {url: request.url});
@@ -34,6 +32,5 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
         originalUrls.delete(canonicalUrls.get(tabid));
         ampUrls.delete(tabid);
         canonicalUrls.delete(tabid);
-        chrome.pageAction.hide(tabid);
     }
 });
