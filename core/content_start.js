@@ -8,11 +8,14 @@ var headObserver = null;
 var linkObserver = null;
 
 function initAmpObserver() {
-    linkObserver = new MutationObserver(checkAmp);
-    linkObserver.observe(document.head, {
-        childList: true,
-        subtree: true
-    });
+    checkAmp();
+    if (!lastResult) {
+        linkObserver = new MutationObserver(checkAmp);
+        linkObserver.observe(document.head, {
+            childList: true,
+            subtree: true
+        });
+    }
 }
 
 function checkHead() {
@@ -34,11 +37,12 @@ function waitForHead() {
 
 function checkAmp() {
     let docEl = document.documentElement;
-    let isAMP = docEl.hasAttribute('amp') || docEl.hasAttribute('⚡️');
 
-    if (!document.head) {
+    if (!docEl || !document.head) {
         return;
     }
+
+    let isAMP = docEl.hasAttribute('amp') || docEl.hasAttribute('⚡️');
 
     if (isAMP) {
         let canonicalLink = document.head.querySelector(canonicalSelector);
