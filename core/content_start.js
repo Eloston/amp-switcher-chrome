@@ -47,7 +47,7 @@ function checkAmp() {
     if (isAMP) {
         let canonicalLink = document.head.querySelector(canonicalSelector);
         if (canonicalLink && canonicalLink.href && lastResult !== 'amp') {
-            lastResult = true;
+            lastResult = 'amp';
             chrome.runtime.sendMessage({amp: false, canonical: true, url: canonicalLink.href, origUrl: location.href});
         } else if (lastResult !== false) {
             lastResult = false;
