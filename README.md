@@ -1,6 +1,6 @@
 # AMP Switcher Chrome
 
-A Chrome extension for toggling Accelerated Mobile Pages (AMP) when available.
+A Chrome extension for enabling Accelerated Mobile Pages (AMP) viewing.
 
 Forked from: https://chrome.google.com/webstore/detail/amp-accelerated-mobile-pa/baodpdnidmedcpanneabeldenamaaeoe
 
