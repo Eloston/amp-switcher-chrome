@@ -1,6 +1,6 @@
 "use strict";
 
-var ampSelector = 'link[rel="amphtml"]';
+var ampSelector = 'link[rel="amphtml"], link[rel="miphtml"]';
 var canonicalSelector = 'link[rel="canonical"]';
 var lastResult = null;
 
@@ -42,7 +42,7 @@ function checkAmp() {
         return;
     }
 
-    let isAMP = docEl.hasAttribute('amp') || docEl.hasAttribute('⚡️');
+    let isAMP = docEl.hasAttribute('amp') || docEl.hasAttribute('⚡️') || docEl.hasAttribute('mip');
 
     if (isAMP) {
         let canonicalLink = document.head.querySelector(canonicalSelector);
@@ -68,11 +68,6 @@ function checkAmp() {
         linkObserver.disconnect();
         linkObserver = false;
     }
-}
-
-function initObserver() {
-    let observer = new MutationObserver(check);
-
 }
 
 waitForHead();
