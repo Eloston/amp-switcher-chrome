@@ -72,10 +72,8 @@ function checkAmp() {
 
 waitForHead();
 
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        if (request.message === 'navigate') {
-            location.href = request.url;
-        }
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if ('message' in request && request.message === 'navigate') {
+        location.href = request.url;
     }
-);
+});

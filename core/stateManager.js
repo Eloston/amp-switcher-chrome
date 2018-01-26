@@ -37,17 +37,15 @@ var stateManager = {
   forUrl: function (url) {
     let realArticleUrl = helpers.getOriginalUrlFromUrl(url);
     var keys = {
-      page: 'page-' + realArticleUrl,
       domain: 'domain-' + this.convertUrlToDomain(realArticleUrl)
     };
     return {
       domainSettings: managerForKey(keys.domain),
-      pageSettings: managerForKey(keys.page),
       getAmpSetting: function () {
         return new Promise(function (res) {
-          var query = ['default', keys.page, keys.domain];
+          var query = ['default', keys.domain];
           chrome.storage.sync.get(query, function (result) {
-            res(result[keys.page] || result[keys.domain] || result.default || defaultDefault);
+            res(result[keys.domain] || result.default || defaultDefault);
           });
         });
       }

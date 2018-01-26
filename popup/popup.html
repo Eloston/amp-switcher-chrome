@@ -1,17 +1,18 @@
 <link rel="stylesheet" href="popup.css"/>
 <form id="main-form">
   <h1>AMP Settings</h1>
+  <fieldset class="tab">
+    <h2>Current Tab:</h2>
+    <label>
+      <input type="checkbox" id="disable_tab"></input>
+      Disable automatic redirection
+    </label>
+  </fieldset>
   <fieldset class="page">
     <h2>Current Page:</h2>
-    <label>
-      <input type="radio" value="on" name="page"> AMP version if available
-    </label>
-    <label>
-      <input type="radio" value="off" name="page"> Normal version
-    </label>
-    <label>
-      <input type="radio" value="default" name="page"> No preference
-    </label>
+    <input type="button" name="page" id="goto_amp" value="Go to AMP version"></input>
+    <input type="button" name="page" id="goto_canonical" value="Go to normal version"></input>
+    <input type="button" name="page" id="goto_originating" value="Go to the originating page"></input>
   </fieldset>
   <fieldset class="domain">
     <h2><span id="current-domain"></span>:</h2>

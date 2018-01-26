@@ -2,6 +2,6 @@
 
 var helpers = {
   getOriginalUrlFromUrl: function (url) {
-    return chrome.extension.getBackgroundPage().originalUrls.get(url) || url;
+    return chrome.extension.getBackgroundPage().originatingUrls.get(url) || url;
   }
 };
